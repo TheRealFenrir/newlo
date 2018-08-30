@@ -1,0 +1,52 @@
+<ng-template #playerTemplate let-control="control" let-form="form" let-players="players">
+  <mat-form-field style="margin: 5px" [formGroup]="form">
+    <mat-select placeholder="Player" [formControlName]="control" (selectionChange)="onSelectionChange()">
+      <mat-option *ngFor="let player of players" [value]="player"> {{player.name}} </mat-option>
+    </mat-select>
+    <mat-error> {{getErrors(control)}} </mat-error>
+    <mat-hint> {{getMmr(control)}} </mat-hint>
+  </mat-form-field>
+</ng-template>
+
+<ng-template #scoreTemplate let-control="control" let-form="form">
+  <mat-form-field style="margin: 5px" [formGroup]="form">
+    <input matInput type="number" placeholder="Score" [formControlName]="control">
+    <mat-error> {{getErrors(control)}} </mat-error>
+    <mat-hint> 0 - 5 </mat-hint>
+    <mat-hint *ngIf="prediction" align="end"> Predicted {{prediction[0]}}</mat-hint>
+  </mat-form-field>
+</ng-template>
+
+<mat-card style="margin: 10px;">
+
+  <mat-card-content style="display: flex; flex-flow: row wrap; align-items: center;">
+    <div style="flex: 1 1 auto;">
+      <mat-card-header>
+        <mat-card-title> Team 1 </mat-card-title>
+      </mat-card-header>
+      <div style="display: flex; flex-flow: row wrap;">
+        <ng-template *ngTemplateOutlet="playerTemplate; context: { control: 't1p1', form: form, players: players }"></ng-template>
+        <ng-template *ngTemplateOutlet="playerTemplate; context: { control: 't1p2', form: form, players: players }"></ng-template>
+        <ng-template *ngTemplateOutlet="scoreTemplate; context: { control: 't1Score', form: form }"></ng-template>
+      </div>
+    </div>
+    
+    <div style="flex: 1 1 auto;">
+      <mat-card-header>
+        <mat-card-title> Team 2 </mat-card-title>
+      </mat-card-header>
+      <div style="display: flex; flex-flow: row wrap;">
+        <ng-template *ngTemplateOutlet="playerTemplate; context: { control: 't2p1', form: form, players: players }"></ng-template>
+        <ng-template *ngTemplateOutlet="playerTemplate; context: { control: 't2p2', form: form, players: players }"></ng-template>
+        <ng-template *ngTemplateOutlet="scoreTemplate; context: { control: 't2Score', form: form }"></ng-template>
+      </div>
+    </div>
+
+  </mat-card-content>
+
+  <mat-card-actions [class.bg-danger]="form.invalid" style="display: flex; flex-direction: row; justify-content: space-between">
+    <button mat-button type="submit" color="primary" [disabled]="form.invalid" (click)="onSubmit()">SUBMIT</button>
+    <mat-error> {{getFormErrors()}} </mat-error>
+  </mat-card-actions>
+
+</mat-card>
